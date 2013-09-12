@@ -92,12 +92,12 @@ class PurchaseAWSFPS
 
     static private function pay($service, $token, $purchase)
     {
-        if (!isset($purchase['name'], $purchase['coast']))
+        if (!isset($purchase['name'], $purchase['cost']))
         {
             return false;
         }
-        $coast = number_format(round(($purchase['coast']/100),'2'),'2');
-        $amount = new Amazon_FPS_Model_Amount(array("CurrencyCode" => "USD", "Value" => $coast));
+        $cost = number_format(round(($purchase['cost']/100),'2'),'2');
+        $amount = new Amazon_FPS_Model_Amount(array("CurrencyCode" => "USD", "Value" => $cost));
         
         $reference = Utilites::generate_sequence(128);
         
@@ -126,7 +126,7 @@ class PurchaseAWSFPS
                         
                         //Add purchase to DB
                         $pid = Utilites::generate_sequence(32);
-                        PurchaseAWSDB::savePurchase($pid, $reference, $token, $purchase['name'], $purchase['coast'], $transaction, $result['status']);
+                        PurchaseAWSDB::savePurchase($pid, $reference, $token, $purchase['name'], $purchase['cost'], $transaction, $result['status']);
                         $result['purchaseid'] = $pid;
                     }
                 }
